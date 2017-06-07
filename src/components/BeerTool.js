@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
 import IngredientCard from './IngredientCard'
+import YieldCard from './YieldCard'
 import './IngredientCard.sass'
 
 class BeerTool extends PureComponent {
@@ -37,8 +38,8 @@ class BeerTool extends PureComponent {
       const yieldValue = yieldMatch[1].split(" ")[0]
 
       if(!isNaN(yieldValue)) {
-        newValues.yieldValue = yieldValue
-        newValues.yieldString = yieldMatch[1]
+        newValues.originalYield = yieldValue
+        newValues.originalYieldText = yieldMatch[1]
       }
     }
 
@@ -65,6 +66,8 @@ class BeerTool extends PureComponent {
 
   render() {
 
+    const { textAreaValue, ingredients, originalYield, originalYieldText, yieldInLiters } = this.state.recipe
+
     return (
       <div>
         <textarea
@@ -72,35 +75,23 @@ class BeerTool extends PureComponent {
           cols='50'
           placeholder='Paste recipe here'
           ref='recipeTextArea'
-          value={this.state.recipe.textAreaValue}
+          value={ textAreaValue }
           onChange={this.handleRecipeInput}
         >
         </textarea>
 
         <div>
           {
-            this.state.recipe.ingredients ? (
+            ingredients ? (
               <div className="ingredientCard">
-                <IngredientCard ingredients={this.state.recipe.ingredients} />
+                <IngredientCard ingredients={ ingredients } />
                 <div>
-                  { this.state.recipe.yieldValue ? (
-                      <div>
-                        <h3>Yield</h3>
-                        <div>Original yield: { this.state.recipe.yieldString }</div>
-                        <div>
-                          Desired yield in not stupid system:
-                          <input
-                            type="text"
-                            ref='yieldInLiters'
-                            value={this.state.recipe.yieldInLiters}
-                            onChange={this.handleLitersInput}
-                          />
-                        </div>
-                      </div>
+                  { originalYield ? (
+                    <YieldCard yieldInLiters={yieldInLiters} originalYieldText={originalYieldText} literCallback={this.handleLitersInput} />
                     ) : null
                   }
                 </div>
-                <IngredientCard ingredients={this.state.recipe.ingredients} />
+                <IngredientCard ingredients={ingredients} />
               </div>
             ) : null
           }
