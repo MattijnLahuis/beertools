@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import MultiLine from './MultiLine'
 import './IngredientCard.sass'
 
-class App extends Component {
+class IngredientCard extends Component {
   static PropTypes = {
     ingredients: PropTypes.array.isRequired
   }
@@ -18,4 +19,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default IngredientCard;

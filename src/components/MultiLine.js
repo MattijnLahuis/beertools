@@ -1,8 +1,12 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 
-class App extends PureComponent {
+class MultiLine extends PureComponent {
+  static PropTypes = {
+    text: PropTypes.string.isRequired
+  }
+
   render() {
-
     return (
       <ul>
         {this.props.text.split("\n").map((i, index) => {
@@ -13,4 +17,4 @@ class App extends PureComponent {
   }
 }
 
-export default App;
+export default MultiLine;

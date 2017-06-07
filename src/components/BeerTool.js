@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import IngredientCard from './IngredientCard'
 import './IngredientCard.sass'
 
-class App extends PureComponent {
+class BeerTool extends PureComponent {
   constructor() {
     super()
 
@@ -67,4 +67,4 @@ class App extends PureComponent {
   }
 }
 
-export default App;
+export default BeerTool;
