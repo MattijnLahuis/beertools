@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 class YieldCard extends Component {
   render() {
 
-    const { originalYieldText, yieldInLiters, literCallback } = this.props
+    const { originalYieldText, targetYield, literCallback, calculateCallback } = this.props
 
     return (
       <div>
@@ -14,10 +14,11 @@ class YieldCard extends Component {
           Desired yield in not stupid system:
           <input
             type="text"
-            ref='yieldInLiters'
-            value={yieldInLiters}
+            ref='targetYield'
+            value={targetYield}
             onChange={literCallback}
           />
+          <button onClick={calculateCallback}>Calculate</button>
         </div>
       </div>
     );
@@ -26,8 +27,9 @@ class YieldCard extends Component {
 
 YieldCard.PropTypes = {
   originalYieldText: PropTypes.string.isRequired,
-  yieldInLiters: PropTypes.number.isRequired,
-  literCallback: PropTypes.func.isRequired
+  targetYield: PropTypes.number.isRequired,
+  literCallback: PropTypes.func.isRequired,
+  calculateCallback: PropTypes.func.isRequired
 }
 
 export default YieldCard;

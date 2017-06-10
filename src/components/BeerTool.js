@@ -9,13 +9,15 @@ class BeerTool extends PureComponent {
 
     this.state = {
       recipe: {
-        yieldInLiters: 25
+        targetYield: 25
       }
     }
 
     this.updateRecipeState = this.updateRecipeState.bind(this)
     this.handleRecipeInput = this.handleRecipeInput.bind(this)
     this.handleLitersInput = this.handleLitersInput.bind(this)
+    this.convertToMetric = this.convertToMetric.bind(this)
+    this.calculateNewRecipe = this.calculateNewRecipe.bind(this)
   }
 
   updateRecipeState(newValues = {}) {
@@ -38,7 +40,7 @@ class BeerTool extends PureComponent {
       const yieldValue = yieldMatch[1].split(" ")[0]
 
       if(!isNaN(yieldValue)) {
-        newValues.originalYield = yieldValue
+        newValues.originalYield = parseFloat(yieldValue) * 3.78541
         newValues.originalYieldText = yieldMatch[1]
       }
     }
@@ -55,21 +57,73 @@ class BeerTool extends PureComponent {
       newValues.ingredients = ingredients
       newValues.textAreaValue = event.target.value
     }
+
     this.updateRecipeState(newValues)
+  }
+
+  calculateNewRecipe() {
+    const ingrList = this.state.recipe.ingredients.split(/\n/)
+
+    let convertedIngr = ""
+
+    for(let i=0; i<ingrList.length;i++) {
+      let item = ingrList[i]
+
+      convertedIngr += this.convertToMetric(item) + '\n'
+    }
+
+    this.updateRecipeState({metricIngredients: convertedIngr})
+  }
+
+  convertToMetric(item) {
+    var amountInGrams = parseFloat(item.split(' ')[0])
+    var splitOn = '';
+    if(item.contains('lb')) {
+      amountInGrams *= 453.6
+      splitOn = 'lb'
+    } else if(item.contains('oz')) {
+      amountInGrams *= 28.35
+      splitOn = 'oz'
+    } else if(item.contains('cup')) {
+      amountInGrams *= 340
+      splitOn = 'cup'
+    } else if(item.contains('tbs')) {
+      amountInGrams *= 4.929
+      splitOn = 'tbs'
+    } else if(item.contains('tsp')) {
+      amountInGrams *= 4.929
+      splitOn = 'tsp'
+    } else {
+      return item
+    }
+
+    const parts = item.split(splitOn)
+    const { originalYield, targetYield } = this.state.recipe
+
+    return parseInt(amountInGrams / parseFloat(originalYield) * parseFloat(targetYield))  + " gram" + parts[1]
   }
 
   handleLitersInput(event) {
     this.updateRecipeState({
-      yieldInLiters: event.target.value
+      targetYield: event.target.value
     })
   }
 
   render() {
-
-    const { textAreaValue, ingredients, originalYield, originalYieldText, yieldInLiters } = this.state.recipe
+    const { textAreaValue, ingredients, metricIngredients, originalYield, originalYieldText, targetYield } = this.state.recipe
 
     return (
       <div>
+        <div style={{marginLeft: '40%', textAlign: 'left'}}>
+          <h1>INSTRUCTIONS</h1>
+          <ul>
+            <li>Find a recipe you like on beerrecipes.org</li>
+            <li>Select ALL the text on that page (ctrl+a)</li>
+            <li>Paste text here:</li>
+            <li>Put in desired yield in litres</li>
+            <li>Press calculate</li>
+          </ul>
+        </div>
         <textarea
           rows='10'
           cols='50'
@@ -87,11 +141,16 @@ class BeerTool extends PureComponent {
                 <IngredientCard ingredients={ ingredients } />
                 <div>
                   { originalYield ? (
-                    <YieldCard yieldInLiters={yieldInLiters} originalYieldText={originalYieldText} literCallback={this.handleLitersInput} />
+                    <YieldCard
+                      targetYield={targetYield}
+                      originalYieldText={originalYieldText}
+                      literCallback={this.handleLitersInput}
+                      calculateCallback={this.calculateNewRecipe}
+                    />
                     ) : null
                   }
                 </div>
-                <IngredientCard ingredients={ingredients} />
+                { this.state.recipe.metricIngredients ? <IngredientCard ingredients={metricIngredients} /> : null }
               </div>
             ) : null
           }
