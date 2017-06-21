@@ -78,19 +78,19 @@ class BeerTool extends PureComponent {
   convertToMetric(item) {
     var amountInGrams = parseFloat(item.split(' ')[0])
     var splitOn = '';
-    if(item.contains('lb')) {
+    if(item.includes('lb')) {
       amountInGrams *= 453.6
       splitOn = 'lb'
-    } else if(item.contains('oz')) {
+    } else if(item.includes('oz')) {
       amountInGrams *= 28.35
       splitOn = 'oz'
-    } else if(item.contains('cup')) {
+    } else if(item.includes('cup')) {
       amountInGrams *= 340
       splitOn = 'cup'
-    } else if(item.contains('tbs')) {
+    } else if(item.includes('tbs')) {
       amountInGrams *= 4.929
       splitOn = 'tbs'
-    } else if(item.contains('tsp')) {
+    } else if(item.includes('tsp')) {
       amountInGrams *= 4.929
       splitOn = 'tsp'
     } else {
