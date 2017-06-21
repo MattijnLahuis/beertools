@@ -76,6 +76,7 @@ class BeerTool extends PureComponent {
   }
 
   convertToMetric(item) {
+    item = item.toLowerCase()
     var amountInGrams = parseFloat(item.split(' ')[0])
     var splitOn = '';
     if(item.includes('lb')) {

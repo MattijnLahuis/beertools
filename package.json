@@ -2,6 +2,7 @@
   "name": "beertools",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://www.mattijnlahuis.nl/beertools",
   "dependencies": {
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
